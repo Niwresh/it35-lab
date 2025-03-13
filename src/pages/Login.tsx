@@ -21,7 +21,6 @@ import { logoTwitter } from 'ionicons/icons';
 const Login: React.FC = () => {
   const navigation = useIonRouter();
 
-  // State for login
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
@@ -30,30 +29,26 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  // Predefined valid credentials for login validation
   const validUsername = 'user123';
   const validPassword = 'password123';
 
-  // Login function
   const doLogin = () => {
     if (!username || !password) {
-      setShowAlert(true); // Show alert if username or password is missing
+      setShowAlert(true);
     } else {
       if (username === validUsername && password === validPassword) {
-        setShowSuccessModal(true); // Show success modal on correct credentials
+        setShowSuccessModal(true);
         setShowToast(true);
       } else {
-        setLoginError(true); // Set login error if credentials are incorrect
+        setLoginError(true);
       }
     }
   };
 
-  // Handle alert confirm button click
   const handleAlertConfirm = () => {
-    setShowAlert(false); // Close the alert
+    setShowAlert(false);
   };
 
-  // Handle closing of success modal and redirect to the dashboard
   const handleSuccessModalClose = () => {
     setShowSuccessModal(false);
     navigation.push('/it35-lab/app', 'forward', 'replace');
@@ -61,84 +56,105 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className="ion-padding">
-        <div
-          style={{
+      <IonContent style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        padding: '20px',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: '30px'
+        }}>
+          <IonAvatar style={{
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100%',
-            width: '100%',
-            marginTop: '-10rem',
-            marginBottom: '-18rem',
-          }}
-        >
-          <IonAvatar
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '150px',
-              height: '150px',
-              borderRadius: '50%',
-              overflow: 'hidden',
-            }}
-          >
+            width: '120px',
+            height: '120px',
+            borderRadius: '50%',
+            backgroundColor: '#ffffff',
+            marginBottom: '10px'
+          }}>
             <IonIcon
               icon={logoTwitter}
               color="primary"
-              style={{ fontSize: '120px', color: '#6c757d' }}
+              style={{
+                fontSize: '50px',
+                color: '#1da1f2'
+              }}
             />
           </IonAvatar>
-          <h1
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#333'
+          }}>
             USER LOGIN
           </h1>
         </div>
 
-        {/* Login Form */}
-        <IonItem>
+        <IonItem style={{ marginBottom: '15px', width: '100%' }}>
           <IonInput
             labelPlacement="floating"
             value={username}
             onIonChange={(e) => setUsername(e.detail.value!)}
             placeholder="Enter username"
+            style={{ backgroundColor: '#ffffff' }}
           />
         </IonItem>
-        <IonItem>
+        <IonItem style={{ marginBottom: '15px', width: '100%' }}>
           <IonInput
             labelPlacement="floating"
             value={password}
             onIonChange={(e) => setPassword(e.detail.value!)}
             type={showPassword ? 'text' : 'password'}
             placeholder="Enter password"
+            style={{ backgroundColor: '#ffffff' }}
           >
             <IonInputPasswordToggle slot="end" onClick={() => setShowPassword(!showPassword)} />
           </IonInput>
         </IonItem>
         {loginError && (
           <IonText color="danger">
-            <p>Incorrect username or password. Please try again.</p>
+            <p style={{
+              color: '#e74c3c',
+              marginBottom: '10px'
+            }}>
+              Incorrect username or password. Please try again.
+            </p>
           </IonText>
         )}
-        <IonButton onClick={doLogin} expand="full">Login</IonButton>
+        <IonButton 
+          onClick={doLogin} 
+          expand="full" 
+          style={{
+            backgroundColor: '#1da1f2',
+            color: 'white',
+            fontWeight: 'bold',
+            width: '100%'
+          }}
+        >
+          Login
+        </IonButton>
 
-        {/* Button to navigate to register page */}
         <IonButton 
           onClick={() => navigation.push('/it35-lab/register', 'forward', 'replace')}
           expand="full" 
           color="secondary"
+          style={{
+            marginTop: '10px',
+            width: '100%'
+          }}
         >
           Create Account
         </IonButton>
 
-        {/* Success Modal after successful login */}
         <IonModal isOpen={showSuccessModal} onDidDismiss={handleSuccessModalClose}>
           <IonContent className="ion-padding">
             <h2>Login Successful!</h2>
@@ -146,7 +162,6 @@ const Login: React.FC = () => {
           </IonContent>
         </IonModal>
 
-        {/* Toast message for successful login */}
         <IonToast
           isOpen={showToast}
           message="Login successful! Redirecting to the dashboard..."
@@ -154,7 +169,6 @@ const Login: React.FC = () => {
           duration={3000}
         />
 
-        {/* Alert when any field is missing or validation fails */}
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
