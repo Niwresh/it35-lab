@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { 
   IonAvatar,
   IonButton,
@@ -7,26 +8,56 @@ import {
   IonInputPasswordToggle, 
   IonItem, 
   IonPage, 
-  IonTitle, 
+  IonText, 
   IonToolbar, 
+  IonTitle, 
   useIonRouter, 
-  IonAlert 
+  IonAlert, 
+  IonModal, 
+  IonToast
 } from '@ionic/react';
 import { logoTwitter } from 'ionicons/icons';
-import { useState } from 'react';
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
 
+  // State for login
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
+  // Predefined valid credentials for login validation
+  const validUsername = 'user123';
+  const validPassword = 'password123';
+
+  // Login function
   const doLogin = () => {
-    setShowAlert(true); 
-  }
+    if (!username || !password) {
+      setShowAlert(true); // Show alert if username or password is missing
+    } else {
+      if (username === validUsername && password === validPassword) {
+        setShowSuccessModal(true); // Show success modal on correct credentials
+        setShowToast(true);
+      } else {
+        setLoginError(true); // Set login error if credentials are incorrect
+      }
+    }
+  };
 
-  const doSignUp = () => {
-    navigation.push('/it35-lab/register', 'forward', 'replace');
-  }
+  // Handle alert confirm button click
+  const handleAlertConfirm = () => {
+    setShowAlert(false); // Close the alert
+  };
+
+  // Handle closing of success modal and redirect to the dashboard
+  const handleSuccessModalClose = () => {
+    setShowSuccessModal(false);
+    navigation.push('/it35-lab/app', 'forward', 'replace');
+  };
 
   return (
     <IonPage>
@@ -71,37 +102,68 @@ const Login: React.FC = () => {
           </h1>
         </div>
 
-        <IonTitle>Login</IonTitle>
-        <IonItem>
-          <IonInput label="Email input" type="email" placeholder="email@domain.com" />
-        </IonItem>
-
+        {/* Login Form */}
         <IonItem>
           <IonInput
-            type="password"
-            label="Password"
-            value="NeverGonnaGiveYouUp"
+            labelPlacement="floating"
+            value={username}
+            onIonChange={(e) => setUsername(e.detail.value!)}
+            placeholder="Enter username"
+          />
+        </IonItem>
+        <IonItem>
+          <IonInput
+            labelPlacement="floating"
+            value={password}
+            onIonChange={(e) => setPassword(e.detail.value!)}
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Enter password"
           >
-            <IonInputPasswordToggle slot="end" />
+            <IonInputPasswordToggle slot="end" onClick={() => setShowPassword(!showPassword)} />
           </IonInput>
         </IonItem>
+        {loginError && (
+          <IonText color="danger">
+            <p>Incorrect username or password. Please try again.</p>
+          </IonText>
+        )}
+        <IonButton onClick={doLogin} expand="full">Login</IonButton>
 
-        <IonButton onClick={doLogin} expand="full">
-          Login
-        </IonButton>
-        <IonButton onClick={doSignUp} expand="full">
-          SignUp
+        {/* Button to navigate to register page */}
+        <IonButton 
+          onClick={() => navigation.push('/it35-lab/register', 'forward', 'replace')}
+          expand="full" 
+          color="secondary"
+        >
+          Create Account
         </IonButton>
 
+        {/* Success Modal after successful login */}
+        <IonModal isOpen={showSuccessModal} onDidDismiss={handleSuccessModalClose}>
+          <IonContent className="ion-padding">
+            <h2>Login Successful!</h2>
+            <IonButton expand="full" onClick={handleSuccessModalClose}>Go to Dashboard</IonButton>
+          </IonContent>
+        </IonModal>
+
+        {/* Toast message for successful login */}
+        <IonToast
+          isOpen={showToast}
+          message="Login successful! Redirecting to the dashboard..."
+          onDidDismiss={() => setShowToast(false)}
+          duration={3000}
+        />
+
+        {/* Alert when any field is missing or validation fails */}
         <IonAlert
           isOpen={showAlert}
-          onDidDismiss={() => {
-            setShowAlert(false); 
-            navigation.push('/it35-lab/app', 'forward', 'replace');
-          }}
-          header={'Login Successful'}
-          message={'You have successfully logged in.'}
-          buttons={['OK']}
+          onDidDismiss={() => setShowAlert(false)}
+          header="Please Fill in All Fields"
+          message="All fields are required. Please fill in all fields."
+          buttons={[{
+            text: 'OK',
+            handler: handleAlertConfirm,
+          }]}
         />
       </IonContent>
     </IonPage>
