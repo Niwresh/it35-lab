@@ -10,13 +10,15 @@ import {
   IonTitle, 
   IonToolbar,
   IonAlert,
+  IonLoading,
+  IonLabel,
+  IonText,
   useIonRouter
 } from '@ionic/react';
 
 const Register: React.FC = () => {
   const navigation = useIonRouter();
 
-  // State for registration form
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -25,31 +27,39 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle registration logic
-  const handleRegister = () => {
-    // Check if any fields are empty
+  const DoRegister = () => {
+    setIsLoading(true);
     if (!firstName || !lastName || !address || !email || !password || !confirmPassword) {
       setAlertMessage("Please fill in all fields.");
-      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(true);
+        setIsLoading(false); 
+      }, 1000); 
       return;
     }
-
-    // Check if password and confirm password match
     if (password !== confirmPassword) {
       setAlertMessage("Passwords do not match.");
-      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(true);
+        setIsLoading(false); 
+      }, 1000); 
       return;
     }
 
-    // Handle successful registration (you can add backend logic here)
     setAlertMessage("Registration successful! Redirecting to login.");
-    setShowAlert(true);
-
-    // Simulate redirecting after registration
     setTimeout(() => {
-      navigation.push('/it35-lab', 'forward', 'replace');
-    }, 2000); // Wait 2 seconds before redirecting
+      setShowAlert(true);
+      setIsLoading(false);
+    }, 1000); 
+    setTimeout(() => {
+      navigation.push('/it35-lab', 'forward', 'replace'); 
+    }, 3000); 
+  };
+
+  const DoLogin = () => {
+    navigation.push('/it35-lab', 'forward', 'replace');
   };
 
   return (
@@ -114,18 +124,24 @@ const Register: React.FC = () => {
         </IonItem>
         <IonItem>
           <IonInput
-            label="Confirm Password"
-            labelPlacement="floating"
-            fill="solid"
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
+            label="Confirm Password" 
+            labelPlacement="floating" 
+            fill="solid" 
+            type="password" 
+            placeholder="Confirm password" 
+            value={confirmPassword} 
             onIonChange={(e) => setConfirmPassword(e.detail.value!)}
           />
         </IonItem>
-        <IonButton onClick={handleRegister} expand="full">Register</IonButton>
+        <IonButton onClick={DoRegister} expand="full">Register</IonButton>
 
-        {/* Alert for showing validation or success messages */}
+        <IonLoading
+          isOpen={isLoading}
+          message="Please wait..."
+          duration={0}  
+          spinner="circles"
+        />
+
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
@@ -133,6 +149,11 @@ const Register: React.FC = () => {
           message={alertMessage}
           buttons={[{ text: 'OK', handler: () => setShowAlert(false) }]}
         />
+
+        <IonText color="primary">
+          <IonLabel>Already have an account?</IonLabel>
+          <IonButton fill="clear" onClick={DoLogin}>Sign In</IonButton>
+        </IonText>
       </IonContent>
     </IonPage>
   );
