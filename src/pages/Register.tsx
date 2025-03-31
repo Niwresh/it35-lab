@@ -15,6 +15,9 @@ import {
   IonText,
   useIonRouter
 } from '@ionic/react';
+import { supabase } from '../src/utils/supabaseClients';
+ import bcrypt from 'bcryptjs';
+
 
 const Register: React.FC = () => {
   const navigation = useIonRouter();
