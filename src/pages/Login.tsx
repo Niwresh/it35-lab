@@ -13,6 +13,7 @@ import {
 import { logoIonic, logoTwitter } from 'ionicons/icons';
 import { useState } from 'react';
 import { supabase } from '../utils/supabaseClients';
+import bcrypt from 'bcryptjs';
 
 const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({ message, isOpen, onClose }) => {
   return (
@@ -85,10 +86,10 @@ const Login: React.FC = () => {
           </IonButton>
         </div>
 
-        {/* Reusable AlertBox Component */}
+
         <AlertBox message={alertMessage} isOpen={showAlert} onClose={() => setShowAlert(false)} />
 
-        {/* IonToast for success message */}
+
         <IonToast
           isOpen={showToast}
           onDidDismiss={() => setShowToast(false)}
