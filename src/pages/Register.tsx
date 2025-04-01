@@ -55,11 +55,8 @@ const Register: React.FC = () => {
     };
 
     return (
-        <IonPage>
-            <IonContent
-                fullscreen
-                className="register-container"
-            >
+        <IonPage className="register-container">
+            <IonContent fullscreen>
                 <div className="form-container">
                     <IonCard className="register-card">
                         <IonCardHeader>
@@ -84,15 +81,7 @@ const Register: React.FC = () => {
                 </div>
 
                 <IonModal isOpen={showSuccessModal} onDidDismiss={() => setShowSuccessModal(false)}>
-                    <IonContent className="ion-padding ion-text-center"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            height: '100vh',
-                            justifyContent: 'center',
-                        }}
-                    >
+                    <IonContent className="ion-padding ion-text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
                         <IonTitle>🎉 Registration Successful</IonTitle>
                         <IonText>Your account has been created. Check your email.</IonText>
                         <IonButton routerLink="/it35-lab" routerDirection="back" color="primary">Go to Login</IonButton>
@@ -102,31 +91,32 @@ const Register: React.FC = () => {
                 <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header="Error" message={alertMessage} buttons={['OK']} />
             </IonContent>
 
+           
             <style>
                 {`
                 .register-container {
+                    background: url('/images/solo levelling.gif') no-repeat center center fixed;
+                    background-size: cover;
+                    width: 100%;
+                    height: 100vh;
                     display: flex;
+                    flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    min-height: 100vh;
                 }
-
+                
                 .form-container {
-                    background-image: url('/images/solo leveling.gif');
-                    background-size: cover;
-                    background-position: center;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     width: 100%;
                     max-width: 450px;
-                    margin-left: 430px;
                 }
 
                 .register-card {
                     width: 100%;
                     padding: 20px;
-                    background-color: rgba(255, 255, 255, 0.95);
+                    background-color: rgba(255, 255, 255, 0.85);
                     border-radius: 12px;
                     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
                     text-align: center;

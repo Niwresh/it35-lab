@@ -107,7 +107,7 @@ const Login: React.FC = () => {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: url('/images/solo leveling.gif');
+            background-image: url('/images/solo levelling.gif');
             background-size: cover;
             background-position: center;
           }
