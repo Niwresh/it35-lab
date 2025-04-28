@@ -34,6 +34,7 @@ const Register: React.FC = () => {
 
   const doRegister = async () => {
     setIsLoading(true);
+    
 
     if (!username || !firstName || !lastName || !email || !password || !confirmPassword) {
       setAlertMessage('Please fill in all fields.');
@@ -167,11 +168,15 @@ const Register: React.FC = () => {
               <IonInputPasswordToggle slot="end" />
             </IonInput>
 
-            {/* Buttons */}
             <div style={{ marginTop: '20px' }}>
-              <IonButton expand="block" onClick={doRegister}>Register</IonButton>
-              <IonButton expand="block" fill="outline" onClick={goToLogin}>Already have an account? Sign In</IonButton>
-            </div>
+  <IonButton expand="block" color="danger" onClick={doRegister}>
+    Register
+  </IonButton>
+  <IonButton expand="block" fill="outline" color="danger" onClick={goToLogin}>
+    Already have an account? Sign In
+  </IonButton>
+</div>
+
 
           </IonCardContent>
         </IonCard>
