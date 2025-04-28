@@ -115,7 +115,7 @@ const FeedContainer = () => {
           <>
             <IonCard>
               <IonCardHeader>
-                <IonCardTitle>Create Post</IonCardTitle>
+                <IonCardTitle color={'danger'}>Create Post</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
                 <IonInput
@@ -125,7 +125,7 @@ const FeedContainer = () => {
                 />
               </IonCardContent>
               <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0.5rem' }}>
-                <IonButton onClick={createPost}>Post</IonButton>
+                <IonButton onClick={createPost} color={'danger'}>Post</IonButton>
               </div>
             </IonCard>
   
@@ -153,7 +153,7 @@ const FeedContainer = () => {
                           })
                         }
                       >
-                        <IonIcon color="secondary" icon={pencil} />
+                        <IonIcon color="danger" icon={pencil} />
                       </IonButton>
                     </IonCol>
                   </IonRow>
