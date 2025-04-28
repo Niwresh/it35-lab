@@ -51,8 +51,8 @@ import {
                         ))}
   
                         {/*Logout Button*/}
-                        <IonButton routerLink="/it35-lab" routerDirection="back" expand="full">
-                            <IonIcon icon={logOutOutline} slot="start"> </IonIcon>
+                        <IonButton routerLink="/it35-lab" routerDirection="back" color='danger' expand="full">
+                            <IonIcon icon={logOutOutline}  slot="start"> </IonIcon>
                         Logout
                         </IonButton>
                         
