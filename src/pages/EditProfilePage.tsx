@@ -174,7 +174,7 @@ const EditAccount: React.FC = () => {
         </IonHeader>
         <IonContent className="ion-padding">
           <IonItem>
-            <IonText color="secondary">
+            <IonText color="danger">
               <h1>Edit Account</h1>
             </IonText>
           </IonItem>
@@ -198,7 +198,7 @@ const EditAccount: React.FC = () => {
                   onChange={handleAvatarChange}
                 />
   
-                <IonButton expand="block" onClick={() => fileInputRef.current?.click()}>
+                <IonButton expand="block" color={'danger'} onClick={() => fileInputRef.current?.click()}>
                   Upload Avatar
                 </IonButton>
               </IonCol>
@@ -307,7 +307,7 @@ const EditAccount: React.FC = () => {
             </IonRow>
           </IonGrid>
   
-          <IonButton expand="full" onClick={handleUpdate} shape="round">
+          <IonButton expand="full" onClick={handleUpdate} color={'danger'} shape="round">
             Update Account
           </IonButton>
   
