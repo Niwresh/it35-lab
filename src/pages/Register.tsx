@@ -87,11 +87,15 @@ const Register: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className="ion-padding">
+  <IonContent className="ion-padding">
 
-        {/* Avatar */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <IonAvatar style={{ width: '150px', height: '150px' }}>
+    {/* Card Form */}
+    <IonCard style={{ maxWidth: '500px', margin: '20px auto' }}>
+      <IonCardContent>
+
+        {/* Avatar (Moved inside CardContent) */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', marginBottom: '20px' }}>
+          <IonAvatar style={{ width: '120px', height: '120px' }}>
             <img
               src="https://i.pinimg.com/originals/22/e6/cc/22e6cc48795a2c55e7b8eed39d0c5034.gif"
               alt="Avatar"
@@ -99,116 +103,112 @@ const Register: React.FC = () => {
           </IonAvatar>
         </div>
 
-        {/* Card Form */}
-        <IonCard style={{ maxWidth: '500px', margin: '20px auto' }}>
-          <IonCardContent>
+        <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+          <IonText style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>USER REGISTRATION</IonText>
+        </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '15px' }}>
-              <IonText style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>USER REGISTRATION</IonText>
-            </div>
-
-            <IonInput
-              label="Username"
-              labelPlacement="floating"
-              fill="outline"
-              placeholder="Enter a unique username"
-              value={username}
-              onIonChange={(e) => setUsername(e.detail.value!)}
-            />
-            <IonInput
-              label="First Name"
-              labelPlacement="floating"
-              fill="outline"
-              placeholder="Enter your first name"
-              value={firstName}
-              onIonChange={(e) => setFirstName(e.detail.value!)}
-              style={{ marginTop: '15px' }}
-            />
-            <IonInput
-              label="Last Name"
-              labelPlacement="floating"
-              fill="outline"
-              placeholder="Enter your last name"
-              value={lastName}
-              onIonChange={(e) => setLastName(e.detail.value!)}
-              style={{ marginTop: '15px' }}
-            />
-            <IonInput
-              label="Email"
-              labelPlacement="floating"
-              fill="outline"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onIonChange={(e) => setEmail(e.detail.value!)}
-              style={{ marginTop: '15px' }}
-            />
-            <IonInput
-              label="Password"
-              labelPlacement="floating"
-              fill="outline"
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onIonChange={(e) => setPassword(e.detail.value!)}
-              style={{ marginTop: '15px' }}
-            >
-              <IonInputPasswordToggle slot="end" />
-            </IonInput>
-            <IonInput
-              label="Confirm Password"
-              labelPlacement="floating"
-              fill="outline"
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onIonChange={(e) => setConfirmPassword(e.detail.value!)}
-              style={{ marginTop: '15px' }}
-            >
-              <IonInputPasswordToggle slot="end" />
-            </IonInput>
-
-            <div style={{ marginTop: '20px' }}>
-  <IonButton expand="block" color="danger" onClick={doRegister}>
-    Register
-  </IonButton>
-  <IonButton expand="block" fill="outline" color="danger" onClick={goToLogin}>
-    Already have an account? Sign In
-  </IonButton>
-</div>
-
-
-          </IonCardContent>
-        </IonCard>
-
-        {/* Loading Spinner */}
-        <IonLoading
-          isOpen={isLoading}
-          message="Please wait..."
-          spinner="circles"
-          duration={0}
+        <IonInput
+          label="Username"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="Enter a unique username"
+          value={username}
+          onIonChange={(e) => setUsername(e.detail.value!)}
         />
-
-        {/* Alerts */}
-        <IonAlert
-          isOpen={showAlert}
-          onDidDismiss={() => setShowAlert(false)}
-          header="Error"
-          message={alertMessage}
-          buttons={[{ text: 'OK', handler: () => setShowAlert(false) }]}
+        <IonInput
+          label="First Name"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="Enter your first name"
+          value={firstName}
+          onIonChange={(e) => setFirstName(e.detail.value!)}
+          style={{ marginTop: '15px' }}
         />
+        <IonInput
+          label="Last Name"
+          labelPlacement="floating"
+          fill="outline"
+          placeholder="Enter your last name"
+          value={lastName}
+          onIonChange={(e) => setLastName(e.detail.value!)}
+          style={{ marginTop: '15px' }}
+        />
+        <IonInput
+          label="Email"
+          labelPlacement="floating"
+          fill="outline"
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onIonChange={(e) => setEmail(e.detail.value!)}
+          style={{ marginTop: '15px' }}
+        />
+        <IonInput
+          label="Password"
+          labelPlacement="floating"
+          fill="outline"
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onIonChange={(e) => setPassword(e.detail.value!)}
+          style={{ marginTop: '15px' }}
+        >
+          <IonInputPasswordToggle slot="end" />
+        </IonInput>
+        <IonInput
+          label="Confirm Password"
+          labelPlacement="floating"
+          fill="outline"
+          type="password"
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onIonChange={(e) => setConfirmPassword(e.detail.value!)}
+          style={{ marginTop: '15px' }}
+        >
+          <IonInputPasswordToggle slot="end" />
+        </IonInput>
 
-        {/* Success Modal */}
-        <IonModal isOpen={showSuccessModal} onDidDismiss={() => setShowSuccessModal(false)}>
-          <IonContent className="ion-padding ion-text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <IonTitle>🎉 Registration Successful</IonTitle>
-            <IonText>Your account has been created. Check your email.</IonText>
-            <IonButton expand="block" onClick={goToLogin} style={{ marginTop: '20px' }}>Go to Login</IonButton>
-          </IonContent>
-        </IonModal>
+        <div style={{ marginTop: '20px' }}>
+          <IonButton expand="block" color="danger" onClick={doRegister}>
+            Register
+          </IonButton>
+          <IonButton expand="block" fill="outline" color="danger" onClick={goToLogin}>
+            Already have an account? Sign In
+          </IonButton>
+        </div>
 
+      </IonCardContent>
+    </IonCard>
+
+    {/* Loading Spinner */}
+    <IonLoading
+      isOpen={isLoading}
+      message="Please wait..."
+      spinner="circles"
+      duration={0}
+    />
+
+    {/* Alerts */}
+    <IonAlert
+      isOpen={showAlert}
+      onDidDismiss={() => setShowAlert(false)}
+      header="Error"
+      message={alertMessage}
+      buttons={[{ text: 'OK', handler: () => setShowAlert(false) }]}
+    />
+
+    {/* Success Modal */}
+    <IonModal isOpen={showSuccessModal} onDidDismiss={() => setShowSuccessModal(false)}>
+      <IonContent className="ion-padding ion-text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        <IonTitle>🎉 Registration Successful</IonTitle>
+        <IonText>Your account has been created. Check your email.</IonText>
+        <IonButton expand="block" onClick={goToLogin} style={{ marginTop: '20px' }}>Go to Login</IonButton>
       </IonContent>
-    </IonPage>
+    </IonModal>
+
+  </IonContent>
+</IonPage>
+
   );
 };
 
