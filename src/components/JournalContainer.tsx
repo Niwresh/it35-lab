@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonInput,
   IonLabel, IonModal, IonFooter, IonCard, IonCardContent, IonCardHeader,
-  IonCardSubtitle, IonCardTitle, IonAlert, IonText, IonAvatar, IonCol,
-  IonGrid, IonRow, IonIcon
+  IonCardSubtitle, IonCardTitle, IonAlert, IonIcon, IonGrid, IonRow, IonCol
 } from '@ionic/react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabaseClients';
@@ -14,6 +13,7 @@ interface JournalEntry {
   auth_uid: string;
   username: string;
   avatar_url: string;
+  post_title: string;         // <-- added
   post_content: string;
   post_created_at: string;
   post_updated_at: string;
@@ -21,6 +21,7 @@ interface JournalEntry {
 
 const JournalContainer = () => {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [entryTitle, setEntryTitle] = useState('');     // <-- added
   const [entryContent, setEntryContent] = useState('');
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -31,10 +32,8 @@ const JournalContainer = () => {
   useEffect(() => {
     const fetchUserAndEntries = async () => {
       const { data: authData } = await supabase.auth.getUser();
-
       if (authData?.user?.email?.endsWith('@nbsc.edu.ph')) {
         setUser(authData.user);
-
         const { data: userData } = await supabase
           .from('users')
           .select('username, user_avatar_url')
@@ -62,7 +61,7 @@ const JournalContainer = () => {
   }, []);
 
   const createEntry = async () => {
-    if (!entryContent || !user || !username) return;
+    if (!entryTitle || !entryContent || !user || !username) return;
 
     const { data: userData } = await supabase
       .from('users')
@@ -74,34 +73,38 @@ const JournalContainer = () => {
 
     const { data } = await supabase
       .from('posts')
-      .insert([
-        {
-          post_content: entryContent,
-          auth_uid: user.id,
-          username,
-          avatar_url: avatarUrl,
-        }
-      ])
+      .insert([{
+        post_title: entryTitle,       // <-- include title
+        post_content: entryContent,
+        auth_uid: user.id,
+        username,
+        avatar_url: avatarUrl,
+      }])
       .select('*');
 
     if (data) {
       setEntries([data[0] as JournalEntry, ...entries]);
+      setEntryTitle('');   // <-- reset title
       setEntryContent('');
     }
   };
 
   const openDiary = (entry: JournalEntry) => {
     setSelectedEntry(entry);
+    setEntryTitle(entry.post_title);      // <-- set title
     setEntryContent(entry.post_content);
     setIsDiaryModalOpen(true);
   };
 
   const saveEditedEntry = async () => {
-    if (!entryContent || !selectedEntry) return;
+    if (!entryTitle || !entryContent || !selectedEntry) return;
 
     const { data } = await supabase
       .from('posts')
-      .update({ post_content: entryContent })
+      .update({
+        post_title: entryTitle,           // <-- update title
+        post_content: entryContent,
+      })
       .match({ post_id: selectedEntry.post_id })
       .select('*');
 
@@ -109,6 +112,7 @@ const JournalContainer = () => {
       const updatedEntry = data[0] as JournalEntry;
       setEntries(entries.map(entry => entry.post_id === updatedEntry.post_id ? updatedEntry : entry));
       setSelectedEntry(null);
+      setEntryTitle('');
       setEntryContent('');
       setIsDiaryModalOpen(false);
       setIsAlertOpen(true);
@@ -117,7 +121,6 @@ const JournalContainer = () => {
 
   const deleteEntry = async () => {
     if (!selectedEntry) return;
-
     await supabase.from('posts').delete().match({ post_id: selectedEntry.post_id });
     setEntries(entries.filter(entry => entry.post_id !== selectedEntry.post_id));
     setSelectedEntry(null);
@@ -134,6 +137,11 @@ const JournalContainer = () => {
                 <IonCardTitle color="danger">New Journal Entry</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
+                <IonInput
+                  value={entryTitle}
+                  placeholder="Enter book title"
+                  onIonChange={e => setEntryTitle(e.detail.value!)}
+                />
                 <IonInput
                   value={entryContent}
                   placeholder="Write your thoughts..."
@@ -152,7 +160,7 @@ const JournalContainer = () => {
                     <IonCard button onClick={() => openDiary(entry)} style={{ textAlign: 'center', cursor: 'pointer' }}>
                       <IonCardHeader>
                         <IonIcon icon={bookOutline} size="large" color="primary" />
-                        <IonCardTitle style={{ marginTop: '10px' }}>My Book</IonCardTitle>
+                        <IonCardTitle style={{ marginTop: '10px' }}>{entry.post_title || 'Untitled Book'}</IonCardTitle>
                         <IonCardSubtitle>{new Date(entry.post_created_at).toLocaleDateString()}</IonCardSubtitle>
                       </IonCardHeader>
                     </IonCard>
@@ -184,6 +192,11 @@ const JournalContainer = () => {
             </IonCardHeader>
             <IonCardContent>
               <IonInput
+                value={entryTitle}
+                onIonChange={e => setEntryTitle(e.detail.value!)}
+                placeholder="Edit title..."
+              />
+              <IonInput
                 value={entryContent}
                 onIonChange={e => setEntryContent(e.detail.value!)}
                 placeholder="Edit your diary..."
@@ -203,7 +216,6 @@ const JournalContainer = () => {
         </IonFooter>
       </IonModal>
 
-      {/* Success Alert */}
       <IonAlert
         isOpen={isAlertOpen}
         onDidDismiss={() => setIsAlertOpen(false)}
